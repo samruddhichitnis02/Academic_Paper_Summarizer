@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Insight | AI Research Assistant</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- Chart.js for Trends -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Vis.js for Network Graph -->
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="brand">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <span class="logo-text">Academic<span class="highlight">Insight</span></span>
+            </div>
+
+            <ul class="nav-links">
+                <li class="nav-item active" data-tab="dashboard">
+                    <a href="#"><i class="fa-solid fa-grid-2"></i> <span>Dashboard</span></a>
+                </li>
+                <li class="nav-item" data-tab="summarize">
+                    <a href="#"><i class="fa-solid fa-file-invoice"></i> <span>Summarize</span></a>
+                </li>
+                <li class="nav-item" data-tab="compare">
+                    <a href="#"><i class="fa-solid fa-scale-balanced"></i> <span>Compare</span></a>
+                </li>
+                <li class="nav-item" data-tab="gaps">
+                    <a href="#"><i class="fa-solid fa-magnifying-glass-chart"></i> <span>Gap Detection</span></a>
+                </li>
+                <li class="nav-item" data-tab="trends">
+                    <a href="#"><i class="fa-solid fa-arrow-trend-up"></i> <span>Trend Mapping</span></a>
+                </li>
+                <li class="nav-item" data-tab="qa">
+                    <a href="#"><i class="fa-solid fa-comments"></i> <span>Intelligent QA</span></a>
+                </li>
+                <li class="nav-item" data-tab="graph">
+                    <a href="#"><i class="fa-solid fa-circle-nodes"></i> <span>Knowledge Graph</span></a>
+                </li>
+            </ul>
+
+            <div class="user-profile">
+                <div class="avatar">
+                    <i class="fa-solid fa-user-graduate"></i>
+                </div>
+                <div class="user-info">
+                    <span class="name">Researcher</span>
+                    <span class="status">Online</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script src="/static/js/visuals.js"></script>
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/main.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

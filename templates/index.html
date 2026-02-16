@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- View: Dashboard (Task Selection) -->
+<section id="dashboard" class="view-section active">
+
+    <header class="section-headers">
+        <h1>Research Workspace</h1>
+        <p>Select a task to get started.</p>
+    </header>
+
+    <!-- Task Selection as Navigation Shortcuts -->
+    <div id="task-selection" class="task-grid fade-in">
+        <div class="task-card" onclick="selectTask('summarize')">
+            <div class="icon-box"><i class="fa-solid fa-file-invoice"></i></div>
+            <h3>Summarize & Explore</h3>
+            <p>Single-paper analysis: Summary, Q&A, Gap Detection, Trends, and Knowledge Graph.</p>
+            <span class="task-badge">Single Paper</span>
+        </div>
+        <div class="task-card" onclick="selectTask('qa')">
+            <div class="icon-box"><i class="fa-solid fa-comments"></i></div>
+            <h3>Intelligent Q&A</h3>
+            <p>Ask questions about your paper and get AI-powered answers from the research content.</p>
+            <span class="task-badge">Single Paper</span>
+        </div>
+        <div class="task-card" onclick="selectTask('gaps')">
+            <div class="icon-box"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+            <h3>Gap Detection</h3>
+            <p>Identify research gaps, unsolved problems, contradictions, and future work opportunities.</p>
+            <span class="task-badge">Single Paper</span>
+        </div>
+        <div class="task-card" onclick="selectTask('trends')">
+            <div class="icon-box"><i class="fa-solid fa-arrow-trend-up"></i></div>
+            <h3>Trend Mapping</h3>
+            <p>Analyze research trends, methodologies, and evolution within your paper's domain.</p>
+            <span class="task-badge">Single Paper</span>
+        </div>
+        <div class="task-card" onclick="selectTask('graph')">
+            <div class="icon-box"><i class="fa-solid fa-circle-nodes"></i></div>
+            <h3>Knowledge Graph</h3>
+            <p>Visualize concepts, entities, and relationships extracted from your research paper.</p>
+            <span class="task-badge">Single Paper</span>
+        </div>
+        <div class="task-card" onclick="selectTask('compare')">
+            <div class="icon-box"><i class="fa-solid fa-scale-balanced"></i></div>
+            <h3>Compare Papers</h3>
+            <p>Upload two papers to analyze similarities, differences, methodologies, and findings.</p>
+            <span class="task-badge">Two Papers</span>
+        </div>
+    </div>
+</section>
+
+<!-- View: Summarize -->
+<section id="summarize" class="view-section">
+    <header class="section-headers">
+        <h1>Paper Summarization</h1>
+    </header>
+
+    <!-- Upload Widget: Summarize -->
+    <div class="upload-widget">
+        <div class="drop-zone" id="drop-zone-summarize">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <p>Upload Paper for Summarization</p>
+            <input type="file" id="file-input-summarize" accept=".pdf" hidden>
+        </div>
+    </div>
+
+    <div class="content-panel">
+        <div class="selection-bar">
+            <div id="file-status-summarize" class="file-status"></div>
+            <button id="btn-generate-summary" class="btn-action">Generate Summary</button>
+        </div>
+        <div class="summary-output">
+            <div class="skeleton-text">Upload a paper and generate summary...</div>
+        </div>
+    </div>
+</section>
+
+<!-- View: Compare -->
+<section id="compare" class="view-section">
+    <header class="section-headers">
+        <h1>Comparative Analysis</h1>
+    </header>
+
+    <!-- Upload Widget: Compare -->
+    <div class="upload-widget">
+        <div class="dual-drop-container">
+            <div class="drop-zone small" id="drop-zone-a">
+                <span class="badgex">Paper A</span>
+                <i class="fa-solid fa-file"></i>
+                <p id="label-a">Upload Paper 1</p>
+                <input type="file" id="file-input-a" accept=".pdf" hidden>
+            </div>
+            <div class="vs-divider">VS</div>
+            <div class="drop-zone small" id="drop-zone-b">
+                <span class="badgex">Paper B</span>
+                <i class="fa-solid fa-file"></i>
+                <p id="label-b">Upload Paper 2</p>
+                <input type="file" id="file-input-b" accept=".pdf" hidden>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-container" style="display: flex; justify-content: center; margin-bottom: 2rem;">
+        <button id="btn-compare-papers" class="btn-action"><i class="fa-solid fa-code-compare"></i> Compare
+            Papers</button>
+    </div>
+
+    <div class="split-view">
+        <div class="panel left-panel">
+            <div class="comparison-content"></div>
+        </div>
+        <div class="panel right-panel">
+            <div class="comparison-content"></div>
+        </div>
+    </div>
+</section>
+
+<!-- View: Research Gaps -->
+<section id="gaps" class="view-section">
+    <header class="section-headers">
+        <h1>Research Gap Detection</h1>
+    </header>
+
+    <!-- Upload Widget: Gaps -->
+    <div class="upload-widget">
+        <div class="drop-zone" id="drop-zone-gaps">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <p>Upload Paper for Gap Detection</p>
+            <input type="file" id="file-input-gaps" accept=".pdf" hidden>
+        </div>
+    </div>
+
+    <div class="action-container" style="display: flex; justify-content: center; margin-bottom: 2rem;">
+        <button id="btn-detect-gaps" class="btn-action"><i class="fa-solid fa-magnifying-glass-chart"></i> Detect
+            Research Gaps</button>
+    </div>
+
+    <div class="gap-grid">
+        <div class="gap-card">
+            <div class="gap-icon"><i class="fa-solid fa-circle-question"></i></div>
+            <h3>Unsolved Problems</h3>
+            <ul class="gap-list"></ul>
+        </div>
+        <div class="gap-card">
+            <div class="gap-icon"><i class="fa-solid fa-lightbulb"></i></div>
+            <h3>Future Work</h3>
+            <ul class="gap-list"></ul>
+        </div>
+        <div class="gap-card">
+            <div class="gap-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <h3>Contradictions</h3>
+            <ul class="gap-list"></ul>
+        </div>
+    </div>
+</section>
+
+<!-- View: Trends -->
+<section id="trends" class="view-section">
+    <header class="section-headers">
+        <h1>Literature Trend Mapping</h1>
+    </header>
+
+    <!-- Upload Widget: Trends -->
+    <div class="upload-widget">
+        <div class="drop-zone" id="drop-zone-trends">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <p>Upload Paper for Trends</p>
+            <input type="file" id="file-input-trends" accept=".pdf" hidden>
+        </div>
+    </div>
+
+    <div class="action-container" style="display: flex; justify-content: center; margin-bottom: 2rem;">
+        <button id="btn-map-trends" class="btn-action"><i class="fa-solid fa-arrow-trend-up"></i> Map Literature
+            Trends</button>
+    </div>
+
+    <div class="chart-container glass-panel">
+        <canvas id="trendChart"></canvas>
+    </div>
+</section>
+
+<!-- View: QA -->
+<section id="qa" class="view-section">
+    <header class="section-headers">
+        <h1>Intelligent Q&A</h1>
+    </header>
+
+    <!-- Upload Widget: QA -->
+    <div class="upload-widget">
+        <div class="drop-zone" id="drop-zone-qa">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <p>Upload Paper for Q&A</p>
+            <input type="file" id="file-input-qa" accept=".pdf" hidden>
+        </div>
+    </div>
+
+    <div class="action-container" style="display: flex; justify-content: center; margin-bottom: 2rem;">
+        <button id="btn-start-qa" class="btn-action"><i class="fa-solid fa-robot"></i> Start Q&A Session</button>
+    </div>
+
+    <div class="chat-interface">
+        <div class="chat-history" id="chat-history">
+            <div class="message system">
+                <div class="avatar"><i class="fa-solid fa-robot"></i></div>
+                <div class="bubble">Hello! Upload a paper to start asking questions.</div>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" placeholder="Ask a question..." id="chat-input">
+            <button class="btn-send"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+</section>
+
+<!-- View: Knowledge Graph -->
+<section id="graph" class="view-section">
+    <header class="section-headers">
+        <h1>Knowledge Graph</h1>
+    </header>
+
+    <!-- Upload Widget: Graph -->
+    <div class="upload-widget">
+        <div class="drop-zone" id="drop-zone-graph">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <p>Upload Paper for Knowledge Graph</p>
+            <input type="file" id="file-input-graph" accept=".pdf" hidden>
+        </div>
+    </div>
+
+    <div class="action-container" style="display: flex; justify-content: center; margin-bottom: 2rem;">
+        <button id="btn-generate-graph" class="btn-action"><i class="fa-solid fa-circle-nodes"></i> Generate
+            Graph</button>
+    </div>
+
+    <div id="network-container" class="glass-panel"></div>
+</section>
+
+<!-- Global Error Toast -->
+<div id="upload-error" class="error-message hidden"
+    style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; background: rgba(30, 41, 59, 0.95);">
+    <i class="fa-solid fa-circle-exclamation"></i> <span>This summarizer accepts only valid pdf</span>
+</div>
+
+{% endblock %}

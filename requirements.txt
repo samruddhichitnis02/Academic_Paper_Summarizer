@@ -1,0 +1,61 @@
+# Core AI/ML Libraries
+langchain
+langchain-community
+langchain-core
+langchain-text-splitters
+langchain-huggingface
+huggingface_hub
+langchain-google-genai
+
+# Text splitting
+langchain-text-splitters
+
+# Ollama integration
+langchain-ollama
+
+# Vector Store & Embeddings
+faiss-cpu
+sentence-transformers
+
+# PDF Processing
+pypdf
+pymupdf
+pdfplumber
+
+# Document Loaders
+unstructured
+
+# Agents & Tools
+langgraph
+
+# Frontend
+streamlit
+streamlit-extras
+
+# Visualization
+plotly
+networkx
+matplotlib
+
+# Utilities
+python-dotenv
+tqdm
+pandas
+numpy
+
+# Text Processing
+nltk
+spacy
+
+# API & Async
+httpx
+aiofiles
+
+# Utilities
+requests
+tqdm
+numpy
+pandas
+fastapi
+uvicorn
+python-multipart
