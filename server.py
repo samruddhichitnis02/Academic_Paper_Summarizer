@@ -8,6 +8,10 @@ from fastapi.responses import HTMLResponse, Response
 from typing import List
 from agent import app_agent
 from utils import process_paper
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 app = FastAPI(title="Academic Paper Summarizer")
 

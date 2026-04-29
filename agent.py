@@ -19,11 +19,12 @@ class AgentState(TypedDict):
 # 2. Initialize Model
 # Using HuggingFace Inference API (free tier)
 # Requires HUGGINGFACEHUB_API_TOKEN in .env
-repo_id = "HuggingFaceH4/zephyr-7b-beta" 
+repo_id = "meta-llama/Meta-Llama-3-8B-Instruct"
 _llm = HuggingFaceEndpoint(
-    repo_id=repo_id, 
-    temperature=0.3, 
-    huggingfacehub_api_token=os.getenv("HUGGINGFACEHUB_API_TOKEN")
+    repo_id=repo_id,
+    temperature=0.3,
+    huggingfacehub_api_token=os.getenv("HUGGINGFACEHUB_API_TOKEN"),
+    task="text-generation"
 )
 llm = ChatHuggingFace(llm=_llm)
 
