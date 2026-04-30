@@ -151,3 +151,37 @@ workflow.add_conditional_edges(
 workflow.add_edge("revise", "critique")
 
 app_agent = workflow.compile()
+
+def answer_question(question: str) -> str:
+    """
+    Answers a question about the uploaded paper using RAG.
+    """
+    retriever = get_retriever()
+    if not retriever:
+        return "Please upload a paper first before asking questions."
+    
+    try:
+        docs = retriever.invoke(question)
+        if not docs:
+            return "I couldn't find relevant information in the paper to answer that question."
+        context_text = "\n\n".join([d.page_content for d in docs])
+    except Exception as e:
+        return f"Error retrieving context: {str(e)}"
+
+    prompt = f"""You are an expert academic research assistant.
+            Answer the following question based ONLY on the provided research paper context.
+            Be concise, accurate, and cite specific details from the paper.
+            If the answer is not in the context, say "I couldn't find that information in the paper."
+
+Question: {question}
+
+Paper Context:
+{context_text}
+
+Answer:"""
+
+    try:
+        response = llm.invoke([HumanMessage(content=prompt)])
+        return response.content
+    except Exception as e:
+        return f"Error generating answer: {str(e)}"

@@ -51,3 +51,21 @@ async function getPaperSummary(paperId) {
 window.uploadPapers = uploadPapers;
 window.clearPaperList = clearPaperList;
 window.getPaperSummary = getPaperSummary;
+
+
+async function askQuestion(question) {
+    try {
+        const response = await fetch('/api/qa', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question })
+        });
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        return await response.json();
+    } catch (error) {
+        console.error('Error asking question:', error);
+        throw error;
+    }
+}
+
+window.askQuestion = askQuestion;

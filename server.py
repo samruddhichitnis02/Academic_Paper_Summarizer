@@ -9,6 +9,8 @@ from typing import List
 from agent import app_agent
 from utils import process_paper
 from dotenv import load_dotenv
+from agent import app_agent, answer_question
+from utils import clear_vector_store
 
 load_dotenv()
 
@@ -55,6 +57,8 @@ async def upload_papers(files: List[UploadFile] = File(...)):
             print(f"[UPLOAD] Saved {file.filename} ({len(contents)} bytes)")
             
             # Process paper for RAG
+            
+            clear_vector_store()
             chunks_count = process_paper(file_path)
             if chunks_count > 0:
                 uploaded_files.append(file.filename)
@@ -128,6 +132,18 @@ async def get_trends():
         "citations": [50, 150, 400, 850, 1200],
         "keywords": ["Self-Attention", "BERT", "GPT-3", "Transformers", "Multimodal"]
     }
+
+@app.post("/api/qa")
+async def qa_endpoint(request: Request):
+    body = await request.json()
+    question = body.get("question", "")
+    if not question:
+        raise HTTPException(status_code=400, detail="No question provided")
+    try:
+        answer = answer_question(question)
+        return {"answer": answer}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     uvicorn.run("server:app", host="0.0.0.0", port=8000, reload=True)

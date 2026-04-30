@@ -79,7 +79,70 @@ function setupActionButtons() {
     if (btnQA) {
         btnQA.addEventListener('click', () => {
             if (!uploadedPapers.single) return alert("Please upload a paper first.");
-            alert("Starting Q&A session...");
+            
+            const chatHistory = document.getElementById('chat-history');
+            chatHistory.innerHTML = `
+                <div class="message system">
+                    <div class="avatar"><i class="fa-solid fa-robot"></i></div>
+                    <div class="bubble">Ready! Ask me anything about <strong>${uploadedPapers.single}</strong>.</div>
+                </div>
+            `;
+        });
+    }
+
+    // Chat send button
+    const btnSend = document.querySelector('.btn-send');
+    const chatInput = document.getElementById('chat-input');
+    if (btnSend && chatInput) {
+        const sendMessage = async () => {
+            const question = chatInput.value.trim();
+            if (!question) return;
+            if (!uploadedPapers.single) return alert("Please upload a paper first.");
+
+            const chatHistory = document.getElementById('chat-history');
+
+            // Add user message
+            chatHistory.innerHTML += `
+                <div class="message user" style="justify-content: flex-end; margin-bottom: 1rem;">
+                    <div class="bubble" style="background: var(--primary); color: white;">${question}</div>
+                </div>
+            `;
+            chatInput.value = '';
+
+            // Add thinking indicator
+            const thinkingId = 'thinking-' + Date.now();
+            chatHistory.innerHTML += `
+                <div class="message system" id="${thinkingId}">
+                    <div class="avatar"><i class="fa-solid fa-robot"></i></div>
+                    <div class="bubble">Thinking...</div>
+                </div>
+            `;
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            try {
+                const result = await window.askQuestion(question);
+                document.getElementById(thinkingId).remove();
+                chatHistory.innerHTML += `
+                    <div class="message system" style="margin-bottom: 1rem;">
+                        <div class="avatar"><i class="fa-solid fa-robot"></i></div>
+                        <div class="bubble">${formatMarkdown(result.answer)}</div>
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById(thinkingId).remove();
+                chatHistory.innerHTML += `
+                    <div class="message system" style="margin-bottom: 1rem;">
+                        <div class="avatar"><i class="fa-solid fa-robot"></i></div>
+                        <div class="bubble" style="color: red;">Error getting answer. Please try again.</div>
+                    </div>
+                `;
+            }
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        };
+
+        btnSend.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') sendMessage();
         });
     }
 

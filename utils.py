@@ -50,16 +50,11 @@ def process_paper(pdf_path: str) -> int:
         embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
         
         # 4. Create or update vector store
-        if _vector_store is None:
-            _vector_store = FAISS.from_documents(chunks, embeddings)
-        else:
-            # Add new documents to existing store
-            new_store = FAISS.from_documents(chunks, embeddings)
-            _vector_store.merge_from(new_store)
+        # Always replace the store with the new paper (single paper mode)
+        _vector_store = FAISS.from_documents(chunks, embeddings)
         
         print(f"Successfully processed {pdf_path}: {len(chunks)} chunks created")
         return len(chunks)
-        
     except Exception as e:
         print(f"Error processing {pdf_path}: {e}")
         import traceback
